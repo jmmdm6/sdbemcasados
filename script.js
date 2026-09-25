@@ -7,12 +7,21 @@ const introVideo = document.getElementById("introVideo");
 const skipIntro = document.getElementById("skipIntro");
 
 function fecharIntro() {
+
     if (!intro) {
         return;
     }
 
     intro.classList.add("hidden");
     document.body.style.overflow = "";
+
+    if (introVideo) {
+        introVideo.pause();
+    }
+}
+
+if (intro) {
+    document.body.style.overflow = "hidden";
 }
 
 if (skipIntro) {
@@ -21,6 +30,10 @@ if (skipIntro) {
 
 if (introVideo) {
     introVideo.addEventListener("ended", fecharIntro);
+
+    introVideo.addEventListener("error", function () {
+        fecharIntro();
+    });
 }
 
 
@@ -31,22 +44,90 @@ if (introVideo) {
 const menuToggle = document.getElementById("menuToggle");
 const nav = document.getElementById("nav");
 
+function fecharMenu() {
+
+    if (!nav || !menuToggle) {
+        return;
+    }
+
+    nav.classList.remove("active");
+
+    const icon = menuToggle.querySelector("i");
+
+    if (icon) {
+        icon.classList.remove("fa-xmark");
+        icon.classList.add("fa-bars");
+    }
+
+    menuToggle.setAttribute(
+        "aria-label",
+        "Abrir menu"
+    );
+}
+
+function abrirOuFecharMenu() {
+
+    if (!nav || !menuToggle) {
+        return;
+    }
+
+    const menuAberto = nav.classList.toggle("active");
+
+    const icon = menuToggle.querySelector("i");
+
+    if (icon) {
+
+        if (menuAberto) {
+
+            icon.classList.remove("fa-bars");
+            icon.classList.add("fa-xmark");
+
+        } else {
+
+            icon.classList.remove("fa-xmark");
+            icon.classList.add("fa-bars");
+        }
+    }
+
+    menuToggle.setAttribute(
+        "aria-label",
+        menuAberto
+            ? "Fechar menu"
+            : "Abrir menu"
+    );
+}
+
 if (menuToggle && nav) {
 
-    menuToggle.addEventListener("click", function () {
-        nav.classList.toggle("active");
-    });
+    menuToggle.addEventListener(
+        "click",
+        abrirOuFecharMenu
+    );
 
     const links = nav.querySelectorAll("a");
 
     links.forEach(function (link) {
 
         link.addEventListener("click", function () {
-            nav.classList.remove("active");
+            fecharMenu();
         });
 
     });
+
 }
+
+
+/* =========================================
+   FECHAR MENU AO REDIMENSIONAR
+========================================= */
+
+window.addEventListener("resize", function () {
+
+    if (window.innerWidth > 800) {
+        fecharMenu();
+    }
+
+});
 
 
 /* =========================================
@@ -82,7 +163,19 @@ categoriaButtons.forEach(function (button) {
             );
 
         if (galeriaSelecionada) {
+
             galeriaSelecionada.classList.add("active");
+
+            /*
+             * As novas imagens da galeria
+             * recebem a animação novamente.
+             */
+            const elementos =
+                galeriaSelecionada.querySelectorAll(".reveal");
+
+            elementos.forEach(function (elemento) {
+                elemento.classList.add("visible");
+            });
         }
 
     });
@@ -103,12 +196,12 @@ const imagemAmpliada =
 
 function abrirImagem(imagem) {
 
-    if (!modalImagem || !imagemAmpliada) {
+    if (!modalImagem || !imagemAmpliada || !imagem) {
         return;
     }
 
     imagemAmpliada.src = imagem.src;
-    imagemAmpliada.alt = imagem.alt;
+    imagemAmpliada.alt = imagem.alt || "Imagem ampliada";
 
     modalImagem.classList.add("active");
 
@@ -125,6 +218,7 @@ function fecharImagem() {
     modalImagem.classList.remove("active");
 
     document.body.style.overflow = "";
+
 }
 
 
@@ -134,13 +228,16 @@ function fecharImagem() {
 
 if (modalImagem) {
 
-    modalImagem.addEventListener("click", function (event) {
+    modalImagem.addEventListener(
+        "click",
+        function (event) {
 
-        if (event.target === modalImagem) {
-            fecharImagem();
+            if (event.target === modalImagem) {
+                fecharImagem();
+            }
+
         }
-
-    });
+    );
 
 }
 
@@ -149,13 +246,30 @@ if (modalImagem) {
    FECHAR MODAL COM ESC
 ========================================= */
 
-document.addEventListener("keydown", function (event) {
+document.addEventListener(
+    "keydown",
+    function (event) {
 
-    if (event.key === "Escape") {
-        fecharImagem();
+        if (event.key === "Escape") {
+
+            if (
+                modalImagem &&
+                modalImagem.classList.contains("active")
+            ) {
+                fecharImagem();
+            }
+
+            if (
+                nav &&
+                nav.classList.contains("active")
+            ) {
+                fecharMenu();
+            }
+
+        }
+
     }
-
-});
+);
 
 
 /* =========================================
@@ -165,23 +279,30 @@ document.addEventListener("keydown", function (event) {
 const elementosReveal =
     document.querySelectorAll(".reveal");
 
+
 if ("IntersectionObserver" in window) {
 
     const observer =
         new IntersectionObserver(
             function (entries) {
 
-                entries.forEach(function (entry) {
+                entries.forEach(
+                    function (entry) {
 
-                    if (entry.isIntersecting) {
+                        if (entry.isIntersecting) {
 
-                        entry.target.classList.add("visible");
+                            entry.target.classList.add(
+                                "visible"
+                            );
 
-                        observer.unobserve(entry.target);
+                            observer.unobserve(
+                                entry.target
+                            );
+
+                        }
 
                     }
-
-                });
+                );
 
             },
             {
@@ -189,15 +310,19 @@ if ("IntersectionObserver" in window) {
             }
         );
 
-    elementosReveal.forEach(function (elemento) {
-        observer.observe(elemento);
-    });
+    elementosReveal.forEach(
+        function (elemento) {
+            observer.observe(elemento);
+        }
+    );
 
 } else {
 
-    elementosReveal.forEach(function (elemento) {
-        elemento.classList.add("visible");
-    });
+    elementosReveal.forEach(
+        function (elemento) {
+            elemento.classList.add("visible");
+        }
+    );
 
 }
 
@@ -222,7 +347,9 @@ if (ano) {
 ========================================= */
 
 const audiosFeedback =
-    document.querySelectorAll(".feedback-audio audio");
+    document.querySelectorAll(
+        ".feedback-audio audio"
+    );
 
 
 /*
@@ -230,60 +357,77 @@ const audiosFeedback =
    os outros serão pausados.
 */
 
-audiosFeedback.forEach(function (audio) {
+audiosFeedback.forEach(
+    function (audio) {
 
-    audio.addEventListener("play", function () {
+        audio.addEventListener(
+            "play",
+            function () {
 
-        audiosFeedback.forEach(function (outroAudio) {
+                audiosFeedback.forEach(
+                    function (outroAudio) {
 
-            if (outroAudio !== audio) {
-                outroAudio.pause();
+                        if (outroAudio !== audio) {
+                            outroAudio.pause();
+                        }
+
+                    }
+                );
+
             }
+        );
 
-        });
-
-    });
-
-});
+    }
+);
 
 
 /* =========================================
    PAUSAR ÁUDIOS AO SAIR DA ABA
 ========================================= */
 
-document.addEventListener("visibilitychange", function () {
+document.addEventListener(
+    "visibilitychange",
+    function () {
 
-    if (document.hidden) {
+        if (document.hidden) {
 
-        audiosFeedback.forEach(function (audio) {
-            audio.pause();
-        });
+            audiosFeedback.forEach(
+                function (audio) {
+                    audio.pause();
+                }
+            );
+
+        }
 
     }
-
-});
+);
 
 
 /* =========================================
    CONTROLE DO ÁUDIO
 ========================================= */
 
-/*
-   Garante que os áudios comecem pausados.
-*/
+audiosFeedback.forEach(
+    function (audio) {
 
-audiosFeedback.forEach(function (audio) {
+        audio.pause();
+        audio.currentTime = 0;
 
-    audio.pause();
+    }
+);
 
-    audio.currentTime = 0;
 
-});
+/* =========================================
+   IMPEDIR SCROLL HORIZONTAL
+========================================= */
+
+document.documentElement.style.overflowX = "hidden";
 
 
 /* =========================================
    FINAL
 ========================================= */
 
-console.log("SD Bem Casados - site carregado com sucesso.");
-
+console.log(
+    "SD Bem Casados - site carregado com sucesso."
+);
