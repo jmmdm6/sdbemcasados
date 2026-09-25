@@ -286,4 +286,3 @@ audiosFeedback.forEach(function (audio) {
 ========================================= */
 
 console.log("SD Bem Casados - site carregado com sucesso.");
-
