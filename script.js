@@ -6,6 +6,7 @@ const intro = document.getElementById("intro");
 const introVideo = document.getElementById("introVideo");
 const skipIntro = document.getElementById("skipIntro");
 
+
 function fecharIntro() {
 
     if (!intro) {
@@ -18,22 +19,30 @@ function fecharIntro() {
     if (introVideo) {
         introVideo.pause();
     }
+
+    // Tenta iniciar a música ao fechar a intro
+    iniciarMusica();
 }
+
 
 if (intro) {
     document.body.style.overflow = "hidden";
 }
 
+
 if (skipIntro) {
     skipIntro.addEventListener("click", fecharIntro);
 }
 
+
 if (introVideo) {
+
     introVideo.addEventListener("ended", fecharIntro);
 
     introVideo.addEventListener("error", function () {
         fecharIntro();
     });
+
 }
 
 
@@ -43,6 +52,7 @@ if (introVideo) {
 
 const menuToggle = document.getElementById("menuToggle");
 const nav = document.getElementById("nav");
+
 
 function fecharMenu() {
 
@@ -65,15 +75,18 @@ function fecharMenu() {
     );
 }
 
+
 function abrirOuFecharMenu() {
 
     if (!nav || !menuToggle) {
         return;
     }
 
-    const menuAberto = nav.classList.toggle("active");
+    const menuAberto =
+        nav.classList.toggle("active");
 
-    const icon = menuToggle.querySelector("i");
+    const icon =
+        menuToggle.querySelector("i");
 
     if (icon) {
 
@@ -86,7 +99,9 @@ function abrirOuFecharMenu() {
 
             icon.classList.remove("fa-xmark");
             icon.classList.add("fa-bars");
+
         }
+
     }
 
     menuToggle.setAttribute(
@@ -97,6 +112,7 @@ function abrirOuFecharMenu() {
     );
 }
 
+
 if (menuToggle && nav) {
 
     menuToggle.addEventListener(
@@ -104,13 +120,17 @@ if (menuToggle && nav) {
         abrirOuFecharMenu
     );
 
-    const links = nav.querySelectorAll("a");
+    const links =
+        nav.querySelectorAll("a");
 
     links.forEach(function (link) {
 
-        link.addEventListener("click", function () {
-            fecharMenu();
-        });
+        link.addEventListener(
+            "click",
+            function () {
+                fecharMenu();
+            }
+        );
 
     });
 
@@ -121,13 +141,16 @@ if (menuToggle && nav) {
    FECHAR MENU AO REDIMENSIONAR
 ========================================= */
 
-window.addEventListener("resize", function () {
+window.addEventListener(
+    "resize",
+    function () {
 
-    if (window.innerWidth > 800) {
-        fecharMenu();
+        if (window.innerWidth > 800) {
+            fecharMenu();
+        }
+
     }
-
-});
+);
 
 
 /* =========================================
@@ -135,52 +158,79 @@ window.addEventListener("resize", function () {
 ========================================= */
 
 const categoriaButtons =
-    document.querySelectorAll(".categoria-btn");
+    document.querySelectorAll(
+        ".categoria-btn"
+    );
 
 const categoriasGaleria =
-    document.querySelectorAll(".categoria-galeria");
+    document.querySelectorAll(
+        ".categoria-galeria"
+    );
 
-categoriaButtons.forEach(function (button) {
 
-    button.addEventListener("click", function () {
+categoriaButtons.forEach(
+    function (button) {
 
-        const categoria =
-            button.getAttribute("data-categoria");
+        button.addEventListener(
+            "click",
+            function () {
 
-        categoriaButtons.forEach(function (btn) {
-            btn.classList.remove("active");
-        });
+                const categoria =
+                    button.getAttribute(
+                        "data-categoria"
+                    );
 
-        categoriasGaleria.forEach(function (galeria) {
-            galeria.classList.remove("active");
-        });
+                categoriaButtons.forEach(
+                    function (btn) {
+                        btn.classList.remove(
+                            "active"
+                        );
+                    }
+                );
 
-        button.classList.add("active");
+                categoriasGaleria.forEach(
+                    function (galeria) {
+                        galeria.classList.remove(
+                            "active"
+                        );
+                    }
+                );
 
-        const galeriaSelecionada =
-            document.getElementById(
-                "galeria-" + categoria
-            );
+                button.classList.add("active");
 
-        if (galeriaSelecionada) {
+                const galeriaSelecionada =
+                    document.getElementById(
+                        "galeria-" + categoria
+                    );
 
-            galeriaSelecionada.classList.add("active");
+                if (galeriaSelecionada) {
 
-            /*
-             * As novas imagens da galeria
-             * recebem a animação novamente.
-             */
-            const elementos =
-                galeriaSelecionada.querySelectorAll(".reveal");
+                    galeriaSelecionada.classList.add(
+                        "active"
+                    );
 
-            elementos.forEach(function (elemento) {
-                elemento.classList.add("visible");
-            });
-        }
+                    const elementos =
+                        galeriaSelecionada.querySelectorAll(
+                            ".reveal"
+                        );
 
-    });
+                    elementos.forEach(
+                        function (elemento) {
 
-});
+                            elemento.classList.add(
+                                "visible"
+                            );
+
+                        }
+                    );
+
+                }
+
+            }
+        );
+
+    }
+);
 
 
 /* =========================================
@@ -188,24 +238,38 @@ categoriaButtons.forEach(function (button) {
 ========================================= */
 
 const modalImagem =
-    document.getElementById("modalImagem");
+    document.getElementById(
+        "modalImagem"
+    );
 
 const imagemAmpliada =
-    document.getElementById("imagemAmpliada");
+    document.getElementById(
+        "imagemAmpliada"
+    );
 
 
 function abrirImagem(imagem) {
 
-    if (!modalImagem || !imagemAmpliada || !imagem) {
+    if (
+        !modalImagem ||
+        !imagemAmpliada ||
+        !imagem
+    ) {
         return;
     }
 
     imagemAmpliada.src = imagem.src;
-    imagemAmpliada.alt = imagem.alt || "Imagem ampliada";
 
-    modalImagem.classList.add("active");
+    imagemAmpliada.alt =
+        imagem.alt ||
+        "Imagem ampliada";
 
-    document.body.style.overflow = "hidden";
+    modalImagem.classList.add(
+        "active"
+    );
+
+    document.body.style.overflow =
+        "hidden";
 }
 
 
@@ -215,9 +279,12 @@ function fecharImagem() {
         return;
     }
 
-    modalImagem.classList.remove("active");
+    modalImagem.classList.remove(
+        "active"
+    );
 
-    document.body.style.overflow = "";
+    document.body.style.overflow =
+        "";
 
 }
 
@@ -232,7 +299,10 @@ if (modalImagem) {
         "click",
         function (event) {
 
-            if (event.target === modalImagem) {
+            if (
+                event.target ===
+                modalImagem
+            ) {
                 fecharImagem();
             }
 
@@ -254,14 +324,18 @@ document.addEventListener(
 
             if (
                 modalImagem &&
-                modalImagem.classList.contains("active")
+                modalImagem.classList.contains(
+                    "active"
+                )
             ) {
                 fecharImagem();
             }
 
             if (
                 nav &&
-                nav.classList.contains("active")
+                nav.classList.contains(
+                    "active"
+                )
             ) {
                 fecharMenu();
             }
@@ -277,7 +351,9 @@ document.addEventListener(
 ========================================= */
 
 const elementosReveal =
-    document.querySelectorAll(".reveal");
+    document.querySelectorAll(
+        ".reveal"
+    );
 
 
 if ("IntersectionObserver" in window) {
@@ -289,7 +365,9 @@ if ("IntersectionObserver" in window) {
                 entries.forEach(
                     function (entry) {
 
-                        if (entry.isIntersecting) {
+                        if (
+                            entry.isIntersecting
+                        ) {
 
                             entry.target.classList.add(
                                 "visible"
@@ -320,7 +398,11 @@ if ("IntersectionObserver" in window) {
 
     elementosReveal.forEach(
         function (elemento) {
-            elemento.classList.add("visible");
+
+            elemento.classList.add(
+                "visible"
+            );
+
         }
     );
 
@@ -343,6 +425,156 @@ if (ano) {
 
 
 /* =========================================
+   MÚSICA DE FUNDO
+========================================= */
+
+const musicaFundo =
+    document.getElementById(
+        "musicaFundo"
+    );
+
+const botaoMusica =
+    document.getElementById(
+        "botaoMusica"
+    );
+
+
+// Controla se a música estava tocando
+// antes do feedback começar.
+let musicaEstavaTocando = false;
+
+
+/* =========================================
+   ATUALIZAR ÍCONE DA MÚSICA
+========================================= */
+
+function atualizarBotaoMusica() {
+
+    if (
+        !botaoMusica ||
+        !musicaFundo
+    ) {
+        return;
+    }
+
+    if (musicaFundo.paused) {
+
+        botaoMusica.innerHTML =
+            '<i class="fa-solid fa-volume-xmark"></i>';
+
+        botaoMusica.setAttribute(
+            "aria-label",
+            "Ativar música"
+        );
+
+        botaoMusica.setAttribute(
+            "title",
+            "Ativar música"
+        );
+
+    } else {
+
+        botaoMusica.innerHTML =
+            '<i class="fa-solid fa-volume-high"></i>';
+
+        botaoMusica.setAttribute(
+            "aria-label",
+            "Desativar música"
+        );
+
+        botaoMusica.setAttribute(
+            "title",
+            "Desativar música"
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   INICIAR MÚSICA
+========================================= */
+
+function iniciarMusica() {
+
+    if (!musicaFundo) {
+        return;
+    }
+
+    musicaFundo.volume = 0.14;
+
+    const promessa =
+        musicaFundo.play();
+
+    if (promessa !== undefined) {
+
+        promessa
+            .then(function () {
+
+                atualizarBotaoMusica();
+
+            })
+            .catch(function () {
+
+                /*
+                 * Alguns navegadores bloqueiam
+                 * músicas iniciadas automaticamente.
+                 *
+                 * Nesse caso, o usuário pode
+                 * clicar no botão da música.
+                 */
+
+                atualizarBotaoMusica();
+
+            });
+
+    }
+
+}
+
+
+/* =========================================
+   CONFIGURAÇÃO DA MÚSICA
+========================================= */
+
+if (musicaFundo) {
+
+    musicaFundo.volume = 0.14;
+
+}
+
+
+if (
+    botaoMusica &&
+    musicaFundo
+) {
+
+    botaoMusica.addEventListener(
+        "click",
+        function () {
+
+            if (musicaFundo.paused) {
+
+                iniciarMusica();
+
+            } else {
+
+                musicaFundo.pause();
+
+                atualizarBotaoMusica();
+
+            }
+
+        }
+    );
+
+    atualizarBotaoMusica();
+
+}
+
+
+/* =========================================
    ÁUDIOS DOS FEEDBACKS
 ========================================= */
 
@@ -353,9 +585,12 @@ const audiosFeedback =
 
 
 /*
-   Quando um áudio começar,
-   os outros serão pausados.
-*/
+ * Quando um áudio começar:
+ *
+ * 1. Os outros feedbacks são pausados.
+ * 2. A música de fundo é pausada.
+ * 3. Guardamos se a música estava tocando.
+ */
 
 audiosFeedback.forEach(
     function (audio) {
@@ -364,15 +599,70 @@ audiosFeedback.forEach(
             "play",
             function () {
 
+                /*
+                 * Pausar outros feedbacks
+                 */
+
                 audiosFeedback.forEach(
                     function (outroAudio) {
 
-                        if (outroAudio !== audio) {
+                        if (
+                            outroAudio !== audio
+                        ) {
+
                             outroAudio.pause();
+
                         }
 
                     }
                 );
+
+
+                /*
+                 * Verificar se a música
+                 * estava tocando
+                 */
+
+                if (musicaFundo) {
+
+                    musicaEstavaTocando =
+                        !musicaFundo.paused;
+
+                    /*
+                     * Pausar música
+                     */
+
+                    musicaFundo.pause();
+
+                    atualizarBotaoMusica();
+
+                }
+
+            }
+        );
+
+
+        /*
+         * Quando o feedback terminar,
+         * a música volta automaticamente
+         * se estava tocando antes.
+         */
+
+        audio.addEventListener(
+            "ended",
+            function () {
+
+                if (
+                    musicaFundo &&
+                    musicaEstavaTocando
+                ) {
+
+                    iniciarMusica();
+
+                }
+
+                musicaEstavaTocando =
+                    false;
 
             }
         );
@@ -393,9 +683,24 @@ document.addEventListener(
 
             audiosFeedback.forEach(
                 function (audio) {
+
                     audio.pause();
+
                 }
             );
+
+            /*
+             * Também pausa a música de fundo
+             * quando o usuário sai da aba.
+             */
+
+            if (musicaFundo) {
+
+                musicaFundo.pause();
+
+                atualizarBotaoMusica();
+
+            }
 
         }
 
@@ -404,7 +709,7 @@ document.addEventListener(
 
 
 /* =========================================
-   CONTROLE DO ÁUDIO
+   CONTROLE INICIAL DOS ÁUDIOS
 ========================================= */
 
 audiosFeedback.forEach(
@@ -421,7 +726,8 @@ audiosFeedback.forEach(
    IMPEDIR SCROLL HORIZONTAL
 ========================================= */
 
-document.documentElement.style.overflowX = "hidden";
+document.documentElement.style.overflowX =
+    "hidden";
 
 
 /* =========================================
